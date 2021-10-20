@@ -1,7 +1,7 @@
 /*
- * Project Name: 1. Projekt - Práce s textem;
- * Author: Jáchym Doležal;
- * Login: xdolez0c;
+ * @ProjectName - 1. Projekt - Práce s textem;
+ * @Author - Jáchym Doležal;
+ * @Login - xdolez0c;
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,7 +20,11 @@ void my_newlineremoval(char * str){
   }
 }
 
-//Counts a length of a string until it reaches the end of it.
+/**
+ * @description - Counts a length of a string until it reaches the end of it.
+ * @param str - string 
+ * @returns strlen - number of a characters in a given string
+ */
 int my_strlen(char * str) { 
   int strlen = 0;
   while (str[strlen] != '\0' && str[strlen] != '\r' && str[strlen] != '\n') {
