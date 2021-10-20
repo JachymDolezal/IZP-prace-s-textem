@@ -11,7 +11,10 @@
 #define BUFFER_SIZE 102
 #define CHAR_TABLE_SIZE 127
 
-//Replaces \n with \0
+/**
+ * @description - Replaces '\n' with '\0'
+ * @param str - given string 
+ */
 void my_newlineremoval(char * str){ 
   for(int index = 0; str[index] != '\0'; index++){
     if(str[index] == '\n'){
@@ -33,7 +36,11 @@ int my_strlen(char * str) {
   return strlen;
 }
 
-//Returns true if two compared strings are the same, otherwise returns false.
+/**
+ * @description
+ * @param 
+ * @returns 
+ */
 bool my_strcmp(char * mystr, char * cmpdstr) { 
   for (int index = 0; mystr[index] == cmpdstr[index]; index++) {
     if (mystr[index] == '\0') {
