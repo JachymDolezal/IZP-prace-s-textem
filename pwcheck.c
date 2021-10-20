@@ -215,8 +215,9 @@ int main(int argc, char * argv[]) {
   int level = strtol(argv[1], & pEnd_level, 10);
   int param = strtol(argv[2], & pEnd_param, 10);
 
+  //Returns error when argument param is smaller than 1
   if (param <= 0) {
-    fprintf(stderr, "ERROR! parameter Param is not in range <1,max_long>\n");
+    fprintf(stderr, "ERROR! parameter Param is smaller than 1\n");
     return EXIT_FAILURE;
   }
 
