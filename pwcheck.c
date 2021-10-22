@@ -11,10 +11,8 @@
 #define BUFFER_SIZE 102
 #define CHAR_TABLE_SIZE 127
 
-/**
- * @description - Replaces '\n' with '\0'
- * @param str - given string 
- */
+
+//Replaces '\n' with '\0'
 void my_newlineremoval(char * str){ 
   for(int index = 0; str[index] != '\0'; index++){
     if(str[index] == '\n'){
@@ -23,11 +21,8 @@ void my_newlineremoval(char * str){
   }
 }
 
-/**
- * @description - Counts a length of a string until it reaches the end of it.
- * @param str - string 
- * @returns strlen - number of a characters in a given string
- */
+
+//description - Counts a length of a string until it reaches the end of it.
 int my_strlen(char * str) { 
   int strlen = 0;
   while (str[strlen] != '\0' && str[strlen] != '\r' && str[strlen] != '\n') {
@@ -36,11 +31,7 @@ int my_strlen(char * str) {
   return strlen;
 }
 
-/**
- * @description
- * @param 
- * @returns 
- */
+// Compares two strings, return true when they match
 bool my_strcmp(char * str, char * cmpdstr) { 
   for (int index = 0; str[index] == cmpdstr[index]; index++) {
     if (str[index] == '\0') {
@@ -80,9 +71,8 @@ bool num_check(char * str) {
   return false;
 }
 
-//Returns true if char is present in the range from 33 to 126 in the ASCII table.
+//Returns true if char of special sign is found in a given string. 
 bool specialsign_check(char * str) { 
-  // 32-126
   for (int index = 0; str[index] != '\0'; index++) {
     if ((str[index] >= ' ' && str[index] <= '/') ||
       (str[index] >= ':' && str[index] <= '@') ||
@@ -114,17 +104,17 @@ bool samechars_check(int param, char * str) {
 //Returns true if an upperboundary of reapeting substrings is found. 
 bool substrings_check(int param, char * str) { 
   int sub;
-  int samechar = 0;
+  int samechar_count = 0;
   for (int i = 0; str[i + param] != '\0'; i++) {
     for (int j = i + 1; str[j] != '\0'; j++) {
       sub = i;
       for (int k = j; i < param + j && str[k] != '\0'; k++) {
         if (str[sub] == str[k]) {
-          samechar++;
+          samechar_count++;
         } else {
-          samechar = 0;
+          samechar_count = 0;
         }
-        if (samechar >= param) {
+        if (samechar_count >= param) {
 
           return false;
         }
@@ -136,176 +126,186 @@ bool substrings_check(int param, char * str) {
 }
 
 //Counts all unique characters in a string and outputs the result when used output = true and "printresults as a input string" 
-int unique_chars(char * mystr, bool output, int array[]) { 
-  int result = 0;
+void unique_chars(char * str, int array[]) { 
   int char_index;
-  for (int index = 0; mystr[index] != '\0'; index++) {
-    for (int index = 0; mystr[index] != '\0' && mystr[index] != '\n' && mystr[index] != '\r'; index++) {
-      char_index = (int)(mystr[index]);
+  for (int index = 0; str[index] != '\0'; index++) { //FIX DOUBLE LOOP PROBLEM
+    for (int index = 0; str[index] != '\0' && str[index] != '\n' && str[index] != '\r'; index++) {
+      char_index = (int)(str[index]);
       if (array[char_index] == 0) {
         array[char_index] = 1;
-      }
-    }
-
-    // If parameter output is set true, it returns the number of unique characters. 
-    if (output) {
-      for (int index = 0; index < CHAR_TABLE_SIZE; index++) {
-        if (array[index] == 1) {
-          result++;
         }
       }
-      return result;
+    }
+}
+
+int sum_of_array(int array[]) {
+  int result = 0;
+
+  for(int index = 0; index < CHAR_TABLE_SIZE; index++){
+    if (array[index] == 1){
+      result++;
     }
   }
-  return 0;
+  return result;
 }
+
 
 //Based on parameters level and param decided which functions for password checking will be called.
 bool arg_parser(int level, int param, bool *upchars,bool *numchars,bool *specialchars, bool *samechars, bool *substrings, bool *lowchars, bool *printing){
-    if (level >= 1 && level <= 4 && param >= 1 && param <= 4) {
-    if (level == 4) {
-      *lowchars = true;
-      *upchars = true;
-      *substrings = true;
-      *samechars = true;
-      *substrings = true;
+  *printing = true;
+  *upchars = false;
+  *numchars = false;
+  *specialchars = false;
+  *samechars = false;
+  *substrings = false;
+  *lowchars = false;
+  *printing = true;
+
+    if (level >= 1 && level <= 4 && param >= 1) {
+      if(level >= 1 && level <= 4){
+        *lowchars = true;
+        *upchars = true;
+      }
+      if(level >= 2 && param >= 3){
+        *numchars = true;
+      }
+      if(level >= 2 && param >= 4){
+        *specialchars = true;
+      }
+      if(level >= 3){
+        *samechars = true;
+      }
+      if(level == 4){
+        *substrings = true;
+      }
     }
-    if (level == 3) {
-      *lowchars = true;
-      *upchars = true;
-      *samechars = true;
-    }
-    if (level >= 2 && param <= 4) {
-      *lowchars = true;
-      *upchars = true;
-    }
-    if (level >= 1 && param <= 4) {
-      *lowchars = true;
-      *upchars = true;
-    }
-    if (level >= 2 && (param >= 3 && param <= 4)) {
-      *lowchars = true;
-      *upchars = true;
-      *numchars = true;
-    }
-    if (level >= 2 && param == 4) {
-      *lowchars = true;
-      *upchars = true;
-      *numchars = true;
-      *specialchars = true;
-    }
-  }
-  if (param > 4) {
-    *printing = false;
-  }
   return 0;
 }
 
+typedef struct{
+  bool upchars;
+  bool numchars;
+  bool specialchars;
+  bool samechars;
+  bool substrings;
+  bool stats;
+  bool lowchars;
+  bool printing;
+  
+} Functions;
+
+typedef struct{
+
+int str_tot_count;
+int min_str;
+int str_tot_sum;
+
+} Statistics; 
+
 int main(int argc, char * argv[]) {
+  Functions func;
+  Statistics var_stats;
   int ascii[CHAR_TABLE_SIZE] = {0};
-  int str_tot_count = 0;
-  int min_str = 100;
-  int str_tot_sum = 0;
+  var_stats.str_tot_count = 0;
+  var_stats.min_str = 100;
+  var_stats.str_tot_sum = 0;
   float str_len_avg;
   char * pEnd_param, * pEnd_level;
-  bool upchars = false;
-  bool numchars = false;
-  bool specialchars = false;
-  bool samechars = false;
-  bool substrings = false;
-  bool stats = false;
-  bool lowchars = false;
-  bool printing = true;
-
-  //Checks for unexcpected number of arguments
-  if (argc <= 2 || argc > 4) { 
-    fprintf(stderr, "Error, unexcpected number of arguments.\n");
-    return EXIT_FAILURE;
-  }
-
+  func.stats = false;
+  //added in front of argc check
   int level = strtol(argv[1], & pEnd_level, 10);
   int param = strtol(argv[2], & pEnd_param, 10);
 
+  //Checks for unexcpected number of arguments
+  if (argc <= 2 || argc > 4) { 
+    fprintf(stderr, "Nepovoleny pocet argumentu.\n");
+    return EXIT_FAILURE;
+  }
+
   //Returns error when argument param is smaller than 1
   if (param <= 0) {
-    fprintf(stderr, "ERROR! parameter Param is smaller than 1\n");
+    fprintf(stderr, "Parametr param musi byt nenulove prirozene cislo.\n");
     return EXIT_FAILURE;
   }
 
   if (level < 1 || level > 4) {
-    fprintf(stderr, "ERROR! parameter LEVEL is not in range <1,4>\n");
+    fprintf(stderr, "Parametr level neni v povolenem intervalu (povoleny interval: 1-4).\n");
     return EXIT_FAILURE;
   }
 
   if (argc == 4) {
     if (my_strcmp(argv[3], "--stats")) {
-      stats = true;
+      func.stats = true;
     } else {
-      fprintf(stderr, "Parameter stats is not in valid format (--stats)\n");
+      fprintf(stderr, "Parametr stats neni ve spravnem formatu (spravny format: --stats).\n");
       return EXIT_FAILURE;
     }
   }
   if ((my_strlen(pEnd_level) > 0) || (my_strlen(pEnd_param) > 0)) {
-    fprintf(stderr, "Parameter level and param must be only numbers\n");
+    fprintf(stderr, "Vstupni parametry level a param mohou byt pouze nenulova prirozena cisla.\n");
     return EXIT_FAILURE;
   }
 
-  arg_parser(level,param,&upchars,&numchars,&specialchars,&samechars,&substrings,&lowchars,&printing);
+  arg_parser(level,param,&func.upchars,&func.numchars,&func.specialchars,&func.samechars,&func.substrings,&func.lowchars,&func.printing);
 
   char password[BUFFER_SIZE];
   while (fgets(password, sizeof(password), stdin) != NULL) {
     my_newlineremoval(password);
+
     int len = my_strlen(password);
+
     if (len > 100) {
-      fprintf(stderr, "password was too long\n");
+      fprintf(stderr, "Heslo nesmi byt delsi nez sto znaku\n");
       return EXIT_FAILURE;
     }
-    if (stats) {
-      str_tot_sum += len;
-      if (len < min_str) {
-        min_str = len;
+
+    if (func.stats) {
+      var_stats.str_tot_sum += len;
+      if (len < var_stats.min_str) {
+        var_stats.min_str = len;
       }
-      str_tot_count++;
-      unique_chars(password, false, ascii);
+      var_stats.str_tot_count++;
+      unique_chars(password, ascii);
     }
-    if (lowchars) {
+
+    if (func.lowchars) {
       if (lowercase_check(password) == false) {
         continue;
       }
     }
-    if (upchars) {
+    if (func.upchars) {
       if (uppercase_check(password) == false) {
         continue;
       }
     }
-    if (numchars) {
+    if (func.numchars) {
       if (num_check(password) == false) {
         continue;
       }
     }
-    if (specialchars) {
+    if (func.specialchars) {
       if (specialsign_check(password) == false) {
         continue;
       }
     }
-    if (samechars) {
+    if (func.samechars) {
       if (samechars_check(param, password) == false) {
         continue;
       }
     }
-    if (substrings) {
+    if (func.substrings) {
       if (substrings_check(param, password) == false) {
         continue;
       }
     }
-    if (printing) {
+    if (func.printing) {
       printf("%s\n", password);
     }
   }
-  if (stats) {
-    str_len_avg = (float) str_tot_sum / (float) str_tot_count;
+  if (func.stats) {
+    str_len_avg = (float) var_stats.str_tot_sum / (float) var_stats.str_tot_count;
     str_len_avg = ((float)((int)(str_len_avg * 10))) / 10;
-    printf("Statistika:\nRuznych znaku: %d\nMinimalni delka: %d\nPrumerna delka: %.1f\n", unique_chars(password, true, ascii), min_str, str_len_avg);
+    printf("Statistika:\nRuznych znaku: %d\nMinimalni delka: %d\nPrumerna delka: %.1f\n", sum_of_array(ascii), var_stats.min_str, str_len_avg);
   }
   return 0;
 }
