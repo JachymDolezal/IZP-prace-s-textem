@@ -11,7 +11,6 @@
 #define BUFFER_SIZE 102
 #define CHAR_TABLE_SIZE 127
 
-
 //Replaces '\n' with '\0'
 void my_newlineremoval(char * str){ 
   for(int index = 0; str[index] != '\0'; index++){
@@ -20,7 +19,6 @@ void my_newlineremoval(char * str){
     }
   }
 }
-
 
 //description - Counts a length of a string until it reaches the end of it.
 int my_strlen(char * str) { 
@@ -138,6 +136,7 @@ void unique_chars(char * str, int array[]) {
     }
 }
 
+//Returns sum of an array.
 int sum_of_array(int array[]) {
   int result = 0;
 
@@ -191,7 +190,7 @@ typedef struct{
   bool stats;
   bool lowchars;
   bool printing;
-  
+
 } Functions;
 
 typedef struct{
