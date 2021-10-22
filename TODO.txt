@@ -1,0 +1,10 @@
+Todo
+
+* Opravit lvl 2 params
+* pridat funkci na error handling 
+* pridat strukturu na bools a stats
+* pridat funkci na stats
+
+* Zkontrolovat komentare 
+* Zkontrolovat variables v programu
+* Zkontrolovat prehlednost kodu
