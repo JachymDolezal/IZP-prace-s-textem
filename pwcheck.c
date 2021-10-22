@@ -41,9 +41,9 @@ int my_strlen(char * str) {
  * @param 
  * @returns 
  */
-bool my_strcmp(char * mystr, char * cmpdstr) { 
-  for (int index = 0; mystr[index] == cmpdstr[index]; index++) {
-    if (mystr[index] == '\0') {
+bool my_strcmp(char * str, char * cmpdstr) { 
+  for (int index = 0; str[index] == cmpdstr[index]; index++) {
+    if (str[index] == '\0') {
       return true;
     }
   }
@@ -51,9 +51,9 @@ bool my_strcmp(char * mystr, char * cmpdstr) {
 }
 
 //Returns true if a lowercase char is present in a string, otherwise returns false.
-bool lowercase_check(char * mystr) { 
-  for (int index = 0; mystr[index] != '\0'; index++) {
-    if (mystr[index] >= 'a' && mystr[index] <= 'z') {
+bool lowercase_check(char * str) { 
+  for (int index = 0; str[index] != '\0'; index++) {
+    if (str[index] >= 'a' && str[index] <= 'z') {
       return true;
     }
   }
@@ -61,9 +61,9 @@ bool lowercase_check(char * mystr) {
 }
 
 //Returns true if an uppercase char is present in a string, otherwirse returns false.
-bool uppercase_check(char * mystr) { 
-  for (int index = 0; mystr[index] != '\0'; index++) {
-    if (mystr[index] >= 'A' && mystr[index] <= 'Z') {
+bool uppercase_check(char * str) { 
+  for (int index = 0; str[index] != '\0'; index++) {
+    if (str[index] >= 'A' && str[index] <= 'Z') {
       return true;
     }
   }
@@ -71,9 +71,9 @@ bool uppercase_check(char * mystr) {
 }
 
 //Returns true if a number char is present in a string, otherwise returns false.
-bool num_check(char * mystr) { 
-  for (int index = 0; mystr[index] != '\0'; index++) {
-    if (mystr[index] >= '0' && mystr[index] <= '9') {
+bool num_check(char * str) { 
+  for (int index = 0; str[index] != '\0'; index++) {
+    if (str[index] >= '0' && str[index] <= '9') {
       return true;
     }
   }
@@ -81,13 +81,13 @@ bool num_check(char * mystr) {
 }
 
 //Returns true if char is present in the range from 33 to 126 in the ASCII table.
-bool specialsign_check(char * mystr) { 
+bool specialsign_check(char * str) { 
   // 32-126
-  for (int index = 0; mystr[index] != '\0'; index++) {
-    if ((mystr[index] >= ' ' && mystr[index] <= '/') ||
-      (mystr[index] >= ':' && mystr[index] <= '@') ||
-      (mystr[index] >= '[' && mystr[index] <= '`') ||
-      (mystr[index] >= '{' && mystr[index] <= '~')) {
+  for (int index = 0; str[index] != '\0'; index++) {
+    if ((str[index] >= ' ' && str[index] <= '/') ||
+      (str[index] >= ':' && str[index] <= '@') ||
+      (str[index] >= '[' && str[index] <= '`') ||
+      (str[index] >= '{' && str[index] <= '~')) {
       return true;
     }
   }
@@ -95,40 +95,40 @@ bool specialsign_check(char * mystr) {
 }
 
 //Returns false if an upperboundery of repeating characters is found.
-bool samechars_check(int param, char * mystr) { 
-  int count = 0;
-  for (int index = 0; mystr[index] != '\0'; index++) {
-    if (mystr[index + 1] == '\0') {
+bool samechars_check(int param, char * str) { 
+  int samechar_count = 0;
+  for (int index = 0; str[index] != '\0'; index++) {
+    if (str[index + 1] == '\0') {
       continue;
-    } else if (mystr[index + 1] == mystr[index]) {
-      count++;
+    } else if (str[index + 1] == str[index]) {
+      samechar_count++;
     } else {
-      count = 0;
+      samechar_count = 0;
     }
-    if (count == param - 1) {
+    if (samechar_count == param - 1) {
       return false; }
   }
   return true;
 }
 
 //Returns true if an upperboundary of reapeting substrings is found. 
-bool substrings_check(int param, char * mystr) { 
-  int count;
-  int strike = 0;
-  for (int index = 0; mystr[index + param] != '\0'; index++) {
-    for (int idx = index + 1; mystr[idx] != '\0'; idx++) {
-      count = index;
-      for (int i = idx; i < param + idx && mystr[i] != '\0'; i++) {
-        if (mystr[count] == mystr[i]) {
-          strike++;
+bool substrings_check(int param, char * str) { 
+  int sub;
+  int samechar = 0;
+  for (int i = 0; str[i + param] != '\0'; i++) {
+    for (int j = i + 1; str[j] != '\0'; j++) {
+      sub = i;
+      for (int k = j; i < param + j && str[k] != '\0'; k++) {
+        if (str[sub] == str[k]) {
+          samechar++;
         } else {
-          strike = 0;
+          samechar = 0;
         }
-        if (strike >= param) {
+        if (samechar >= param) {
 
           return false;
         }
-        count++;
+        sub++;
       }
     }
   }
