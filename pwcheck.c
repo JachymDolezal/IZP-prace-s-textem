@@ -126,15 +126,15 @@ bool substrings_check(int param, char * str) {
 //Counts all unique characters in a string and outputs the result when used output = true and "printresults as a input string" 
 void unique_chars(char * str, int array[]) { 
   int char_index;
-  for (int index = 0; str[index] != '\0'; index++) { //FIX DOUBLE LOOP PROBLEM
+  // for (int index = 0; str[index] != '\0'; index++) { //FIX DOUBLE LOOP PROBLEM
     for (int index = 0; str[index] != '\0' && str[index] != '\n' && str[index] != '\r'; index++) {
       char_index = (int)(str[index]);
       if (array[char_index] == 0) {
         array[char_index] = 1;
-        }
+        } 
       }
     }
-}
+// }
 
 //Returns sum of an array.
 int sum_of_array(int array[]) {

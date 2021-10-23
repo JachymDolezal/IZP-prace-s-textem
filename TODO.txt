@@ -5,6 +5,8 @@ Todo
 * pridat strukturu na bools a stats DONE
 * pridat funkci na stats
 
+* FIX AVG pass when no passws given
+
 * Zkontrolovat komentare DONE
 * Zkontrolovat variables v programu DONE
 * Zkontrolovat prehlednost kodu
