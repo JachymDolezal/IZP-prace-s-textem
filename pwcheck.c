@@ -126,7 +126,6 @@ bool substrings_check(int param, char * str) {
 //Counts all unique characters in a string and outputs the result when used output = true and "printresults as a input string" 
 void unique_chars(char * str, int array[]) { 
   int char_index;
-  // for (int index = 0; str[index] != '\0'; index++) { //FIX DOUBLE LOOP PROBLEM
     for (int index = 0; str[index] != '\0' && str[index] != '\n' && str[index] != '\r'; index++) {
       char_index = (int)(str[index]);
       if (array[char_index] == 0) {
@@ -134,7 +133,6 @@ void unique_chars(char * str, int array[]) {
         } 
       }
     }
-// }
 
 //Returns sum of an array.
 int sum_of_array(int array[]) {
@@ -149,16 +147,15 @@ int sum_of_array(int array[]) {
 }
 
 
-//Based on parameters level and param decided which functions for password checking will be called.
-bool arg_parser(int level, int param, bool *upchars,bool *numchars,bool *specialchars, bool *samechars, bool *substrings, bool *lowchars, bool *printing){
-  *printing = true;
+//Based on parameters level and param decides which functions for password checking will be called.
+bool arg_parser(int level, int param, bool *upchars,bool *numchars,bool *specialchars, bool *samechars, bool *substrings, bool *lowchars){
+
   *upchars = false;
   *numchars = false;
   *specialchars = false;
   *samechars = false;
   *substrings = false;
   *lowchars = false;
-  *printing = true;
 
     if (level >= 1 && level <= 4 && param >= 1) {
       if(level >= 1 && level <= 4){
@@ -189,7 +186,6 @@ typedef struct{
   bool substrings;
   bool stats;
   bool lowchars;
-  bool printing;
 
 } Functions;
 
@@ -205,6 +201,7 @@ int main(int argc, char * argv[]) {
   Functions func;
   Statistics var_stats;
   int ascii[CHAR_TABLE_SIZE] = {0};
+  char password[BUFFER_SIZE];
   var_stats.str_tot_count = 0;
   var_stats.min_str = 100;
   var_stats.str_tot_sum = 0;
@@ -226,12 +223,10 @@ int main(int argc, char * argv[]) {
     fprintf(stderr, "Parametr param musi byt nenulove prirozene cislo.\n");
     return EXIT_FAILURE;
   }
-
   if (level < 1 || level > 4) {
     fprintf(stderr, "Parametr level neni v povolenem intervalu (povoleny interval: 1-4).\n");
     return EXIT_FAILURE;
   }
-
   if (argc == 4) {
     if (my_strcmp(argv[3], "--stats")) {
       func.stats = true;
@@ -245,9 +240,8 @@ int main(int argc, char * argv[]) {
     return EXIT_FAILURE;
   }
 
-  arg_parser(level,param,&func.upchars,&func.numchars,&func.specialchars,&func.samechars,&func.substrings,&func.lowchars,&func.printing);
-
-  char password[BUFFER_SIZE];
+  arg_parser(level,param,&func.upchars,&func.numchars,&func.specialchars,&func.samechars,&func.substrings,&func.lowchars);
+  
   while (fgets(password, sizeof(password), stdin) != NULL) {
     my_newlineremoval(password);
 
@@ -297,9 +291,9 @@ int main(int argc, char * argv[]) {
         continue;
       }
     }
-    if (func.printing) {
-      printf("%s\n", password);
-    }
+ 
+    printf("%s\n", password);
+  
   }
   if (func.stats) {
     str_len_avg = (float) var_stats.str_tot_sum / (float) var_stats.str_tot_count;
