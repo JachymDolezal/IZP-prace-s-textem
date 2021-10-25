@@ -147,7 +147,7 @@ int sum_of_array(int array[]) {
 }
 
 
-//Based on parameters level and param decides which functions for password checking will be called.
+//What password checking functions will be called.
 bool arg_parser(int level, int param, bool *upchars,bool *numchars,bool *specialchars, bool *samechars, bool *substrings, bool *lowchars){
 
   *upchars = false;
