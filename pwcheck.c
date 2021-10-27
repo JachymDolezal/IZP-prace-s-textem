@@ -214,6 +214,7 @@ bool error_check(int *level,int *param, char **argv,int argc, bool *stats){
   return true;
 }
 
+//Strucute for variables used for calculating statistics
 typedef struct{
 
 int str_tot_count;
@@ -223,10 +224,17 @@ int ascii[CHAR_TABLE_SIZE];
 
 } Statistics; 
 
-void stats_count(){
+// void stats_count(Statistics var_stats, char *str){
+//   int len = my_strlen(str);
+//   var_stats.str_tot_sum += len; 
+//   if (len < var_stats.min_str) {
+//     var_stats.min_str = len;
+//   }
+//   var_stats.str_tot_count++;
+//   unique_chars(str, var_stats.ascii); // do funkce
+// }
 
-}
-
+//Outputs the results of the statisitcs to stdout.
 void stats_print(Statistics var_stats){
   float str_len_avg;
   if(var_stats.str_tot_sum != 0){
@@ -239,8 +247,6 @@ void stats_print(Statistics var_stats){
   }
   printf("Statistika:\nRuznych znaku: %d\nMinimalni delka: %d\nPrumerna delka: %.1f\n", sum_of_array(var_stats.ascii), var_stats.min_str, str_len_avg);
 }
-
-
 
 int main(int argc, char *argv[]) {
   Statistics var_stats = {.str_tot_count = 0, .min_str = 100, .str_tot_sum = 0, .ascii = {0}};
@@ -271,6 +277,7 @@ int main(int argc, char *argv[]) {
       }
       var_stats.str_tot_count++;
       unique_chars(password, var_stats.ascii); // do funkce
+      // stats_count(var_stats,password);
     }
 
     if(pwchecker(level, param, password) == true){
