@@ -29,7 +29,7 @@ int my_strlen(char * str) {
   return strlen;
 }
 
-// Compares two strings, return true when they match
+// Compares two strings, returns true when they match
 bool my_strcmp(char * str, char * cmpdstr) { 
   for (int index = 0; str[index] == cmpdstr[index]; index++) {
     if (str[index] == '\0') {
@@ -103,6 +103,9 @@ bool samechars_check(int param, char * str) {
 bool substrings_check(int param, char * str) { 
   int sub;
   int samechar_count = 0;
+  if(param >= my_strlen(str)){
+    return true;
+  }
   for (int i = 0; str[i + param] != '\0'; i++) {
     for (int j = i + 1; str[j] != '\0'; j++) {
       sub = i;
@@ -113,7 +116,6 @@ bool substrings_check(int param, char * str) {
           samechar_count = 0;
         }
         if (samechar_count >= param) {
-
           return false;
         }
         sub++;
@@ -123,7 +125,7 @@ bool substrings_check(int param, char * str) {
   return true;
 }
 
-//Counts all unique characters in a string and outputs the result when used output = true and "printresults as a input string" 
+//Counts all unique characters in a string. 
 void unique_chars(char * str, int array[]) { 
   int char_index;
     for (int index = 0; str[index] != '\0' && str[index] != '\n' && str[index] != '\r'; index++) {
@@ -146,103 +148,113 @@ int sum_of_array(int array[]) {
   return result;
 }
 
-
-//What password checking functions will be called.
-bool arg_parser(int level, int param, bool *upchars,bool *numchars,bool *specialchars, bool *samechars, bool *substrings, bool *lowchars){
-
-  *upchars = false;
-  *numchars = false;
-  *specialchars = false;
-  *samechars = false;
-  *substrings = false;
-  *lowchars = false;
-
-    if (level >= 1 && level <= 4 && param >= 1) {
-      if(level >= 1 && level <= 4){
-        *lowchars = true;
-        *upchars = true;
-      }
-      if(level >= 2 && param >= 3){
-        *numchars = true;
-      }
-      if(level >= 2 && param >= 4){
-        *specialchars = true;
-      }
-      if(level >= 3){
-        *samechars = true;
-      }
-      if(level == 4){
-        *substrings = true;
+//Returns true if password meets all rules given by arguments level and param. 
+bool pwchecker(int level, int param, char * password){
+  if (level >= 1 && level <= 4 && param >= 1) {
+    if(level >= 1 && level <= 4){
+      if(lowercase_check(password)==false || uppercase_check(password)==false ){
+        return false;
       }
     }
-  return 0;
+    if(level >= 2 && param >= 3){
+      if(num_check(password)==false){
+        return false;
+      }
+    }
+    if(level >= 2 && param >= 4){
+      if(specialsign_check(password) == false){
+        return false;
+      }
+    }
+    if(level >= 3){
+      if(samechars_check(param,password) == false){
+        return false;
+      }
+    }
+    if(level == 4){
+      if(substrings_check(param,password) == false){
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
-typedef struct{
-  bool upchars;
-  bool numchars;
-  bool specialchars;
-  bool samechars;
-  bool substrings;
-  bool stats;
-  bool lowchars;
+//Checks for errors in the input parameters.
+bool error_check(int *level,int *param, char **argv,int argc, bool *stats){
+  if (argc < 3 || argc > 4) { 
+    fprintf(stderr, "Nedovoleny pocet argumentu (dovoleny pocet argumentu: 2-3).\n");
+    return false;
+  }
+  char * pEnd_param, * pEnd_level;
+  *level = strtol(argv[1], &pEnd_level, 10);
+  *param = strtol(argv[2], &pEnd_param, 10);
 
-} Functions;
+  //Returns error when argument param is smaller than 1
+  if (*param <= 0) {
+    fprintf(stderr, "Parametr param musi byt nenulove prirozene cislo.\n");
+    return false;
+  }
+  if (*level < 1 || *level > 4) {
+    fprintf(stderr, "Parametr level neni v povolenem intervalu (povoleny interval: 1-4).\n");
+    return false;
+  }
+  if (argc == 4) {
+    if (my_strcmp(argv[3], "--stats")) {
+      *stats = true;
+    } else {
+        fprintf(stderr, "Parametr stats neni ve spravnem formatu (spravny format: --stats).\n");
+        return false;
+    }
+  }
+  if ((my_strlen(pEnd_level) > 0) || (my_strlen(pEnd_param) > 0)) {
+    fprintf(stderr, "Vstupni parametry level a param mohou byt pouze nenulova prirozena cisla.\n");
+    return false;
+  }
+  return true;
+}
 
 typedef struct{
 
 int str_tot_count;
 int min_str;
 int str_tot_sum;
+int ascii[CHAR_TABLE_SIZE];
 
 } Statistics; 
 
-int main(int argc, char * argv[]) {
-  Functions func;
-  Statistics var_stats;
-  int ascii[CHAR_TABLE_SIZE] = {0};
-  char password[BUFFER_SIZE];
-  var_stats.str_tot_count = 0;
-  var_stats.min_str = 100;
-  var_stats.str_tot_sum = 0;
+void stats_count(){
+
+}
+
+void stats_print(Statistics var_stats){
   float str_len_avg;
-  char * pEnd_param, * pEnd_level;
-  func.stats = false;
-  //added in front of argc check
-  int level = strtol(argv[1], & pEnd_level, 10);
-  int param = strtol(argv[2], & pEnd_param, 10);
+  if(var_stats.str_tot_sum != 0){
+    str_len_avg = (float) var_stats.str_tot_sum / (float) var_stats.str_tot_count;
+    str_len_avg = ((float)((int)(str_len_avg * 10))) / 10;
+  }
+  else{
+    str_len_avg = 0;
+    var_stats.min_str = 0;
+  }
+  printf("Statistika:\nRuznych znaku: %d\nMinimalni delka: %d\nPrumerna delka: %.1f\n", sum_of_array(var_stats.ascii), var_stats.min_str, str_len_avg);
+}
 
-  //Checks for unexcpected number of arguments
-  if (argc <= 2 || argc > 4) { 
-    fprintf(stderr, "Nepovoleny pocet argumentu.\n");
-    return EXIT_FAILURE;
-  }
 
-  //Returns error when argument param is smaller than 1
-  if (param <= 0) {
-    fprintf(stderr, "Parametr param musi byt nenulove prirozene cislo.\n");
-    return EXIT_FAILURE;
-  }
-  if (level < 1 || level > 4) {
-    fprintf(stderr, "Parametr level neni v povolenem intervalu (povoleny interval: 1-4).\n");
-    return EXIT_FAILURE;
-  }
-  if (argc == 4) {
-    if (my_strcmp(argv[3], "--stats")) {
-      func.stats = true;
-    } else {
-      fprintf(stderr, "Parametr stats neni ve spravnem formatu (spravny format: --stats).\n");
-      return EXIT_FAILURE;
-    }
-  }
-  if ((my_strlen(pEnd_level) > 0) || (my_strlen(pEnd_param) > 0)) {
-    fprintf(stderr, "Vstupni parametry level a param mohou byt pouze nenulova prirozena cisla.\n");
-    return EXIT_FAILURE;
-  }
 
-  arg_parser(level,param,&func.upchars,&func.numchars,&func.specialchars,&func.samechars,&func.substrings,&func.lowchars);
+int main(int argc, char *argv[]) {
+  Statistics var_stats = {.str_tot_count = 0, .min_str = 100, .str_tot_sum = 0, .ascii = {0}};
+  bool stats = false;
+  char password[BUFFER_SIZE];
+  int param;
+  int level;
+
+  if(error_check(&level,&param,argv,argc,&stats) == false){
+    return EXIT_FAILURE;
+  }
   
   while (fgets(password, sizeof(password), stdin) != NULL) {
+
     my_newlineremoval(password);
 
     int len = my_strlen(password);
@@ -252,53 +264,22 @@ int main(int argc, char * argv[]) {
       return EXIT_FAILURE;
     }
 
-    if (func.stats) {
-      var_stats.str_tot_sum += len;
+    if (stats) { //todo komentare 
+      var_stats.str_tot_sum += len; 
       if (len < var_stats.min_str) {
         var_stats.min_str = len;
       }
       var_stats.str_tot_count++;
-      unique_chars(password, ascii);
+      unique_chars(password, var_stats.ascii); // do funkce
     }
 
-    if (func.lowchars) {
-      if (lowercase_check(password) == false) {
-        continue;
-      }
+    if(pwchecker(level, param, password) == true){
+      printf("%s\n", password);
     }
-    if (func.upchars) {
-      if (uppercase_check(password) == false) {
-        continue;
-      }
-    }
-    if (func.numchars) {
-      if (num_check(password) == false) {
-        continue;
-      }
-    }
-    if (func.specialchars) {
-      if (specialsign_check(password) == false) {
-        continue;
-      }
-    }
-    if (func.samechars) {
-      if (samechars_check(param, password) == false) {
-        continue;
-      }
-    }
-    if (func.substrings) {
-      if (substrings_check(param, password) == false) {
-        continue;
-      }
-    }
- 
-    printf("%s\n", password);
-  
   }
-  if (func.stats) {
-    str_len_avg = (float) var_stats.str_tot_sum / (float) var_stats.str_tot_count;
-    str_len_avg = ((float)((int)(str_len_avg * 10))) / 10;
-    printf("Statistika:\nRuznych znaku: %d\nMinimalni delka: %d\nPrumerna delka: %.1f\n", sum_of_array(ascii), var_stats.min_str, str_len_avg);
-  }
-  return 0;
+
+  if (stats) {
+    stats_print(var_stats);
+    }
+  return EXIT_SUCCESS;
 }
