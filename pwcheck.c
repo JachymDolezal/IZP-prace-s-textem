@@ -10,6 +10,7 @@
 
 #define BUFFER_SIZE 102
 #define CHAR_TABLE_SIZE 127
+char *string = "hello.";
 
 //Replaces '\n' with '\0'
 void my_newlineremoval(char * str){ 
@@ -20,7 +21,7 @@ void my_newlineremoval(char * str){
   }
 }
 
-//description - Counts a length of a string until it reaches the end of it.
+//Counts a length of a string until it reaches the end of it.
 int my_strlen(char * str) { 
   int strlen = 0;
   while (str[strlen] != '\0' && str[strlen] != '\r' && str[strlen] != '\n') {
@@ -29,7 +30,7 @@ int my_strlen(char * str) {
   return strlen;
 }
 
-// Compares two strings, returns true when they match
+//Compares two strings, returns true when they match.
 bool my_strcmp(char * str, char * cmpdstr) { 
   for (int index = 0; str[index] == cmpdstr[index]; index++) {
     if (str[index] == '\0') {
@@ -109,7 +110,8 @@ bool substrings_check(int param, char * str) {
   for (int i = 0; str[i + param] != '\0'; i++) {
     for (int j = i + 1; str[j] != '\0'; j++) {
       sub = i;
-      for (int k = j; i < param + j && str[k] != '\0'; k++) {
+      samechar_count = 0;
+      for (int k = j; k < param + j && str[k] != '\0'; k++) {
         if (str[sub] == str[k]) {
           samechar_count++;
         } else {
@@ -192,11 +194,11 @@ bool error_check(int *level,int *param, char **argv,int argc, bool *stats){
 
   //Returns error when argument param is smaller than 1
   if (*param <= 0) {
-    fprintf(stderr, "Parametr param musi byt nenulove prirozene cislo.\n");
+    fprintf(stderr, "Parametr param musi byt kladne cele cislo.\n");
     return false;
   }
   if (*level < 1 || *level > 4) {
-    fprintf(stderr, "Parametr level neni v povolenem intervalu (povoleny interval: 1-4).\n");
+    fprintf(stderr, "Parametr level neni v povolenem intervalu (povoleny interval: [1,4]).\n");
     return false;
   }
   if (argc == 4) {
@@ -214,7 +216,7 @@ bool error_check(int *level,int *param, char **argv,int argc, bool *stats){
   return true;
 }
 
-//Strucute for variables used for calculating statistics
+//Structure for variables used for calculating statistics.
 typedef struct{
 
 int str_tot_count;
@@ -288,5 +290,6 @@ int main(int argc, char *argv[]) {
   if (stats) {
     stats_print(var_stats);
     }
+
   return EXIT_SUCCESS;
 }
