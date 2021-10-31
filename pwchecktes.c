@@ -3,6 +3,7 @@
  * @Author - Jáchym Doležal;
  * @Login - xdolez0c;
  */
+
 #include <stdio.h>
 
 #include <stdlib.h>
@@ -267,7 +268,7 @@ int main(int argc, char * argv[]) {
   int level;
 
   //Checks for errors that might be caused by wrong input parameters. 
-  if (error_check( & level, & param, argv, argc, & stats) == false) {
+  if (error_check( &level, &param, argv, argc, &stats) == false) {
     return EXIT_FAILURE;
   }
 
@@ -284,7 +285,7 @@ int main(int argc, char * argv[]) {
     }
 
     if (stats) {
-      stats_count( & var_stats, password);
+      stats_count( &var_stats, password);
     }
 
     if (pwchecker(level, param, password) == true) {
